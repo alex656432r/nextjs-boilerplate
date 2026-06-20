@@ -7,10 +7,11 @@
   <style>
     body { background: #0e0e10; color: #e4e4e6; font-family: Verdana, Arial, sans-serif; font-size: 13px; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
     
-    /* Авторизация - жесткая фиксация по центру */
+    /* Красивая форма авторизации - теперь соединена в одном файле */
     .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; position: fixed; top: 0; left: 0; background: #0e0e10; z-index: 99999; }
     .login-box { background: #1a1a1a; padding: 35px; border-radius: 4px; text-align: center; width: 350px; box-shadow: 0 4px 25px rgba(0,0,0,0.6); border: 1px solid #333; }
-    .login-box h2 { margin: 0 0 15px 0; font-size: 18px; color: #fff; }
+    .login-box h2 { margin: 0 0 10px 0; font-size: 18px; color: #fff; font-weight: bold; }
+    .login-box p { color: #666; font-size: 12px; margin: 0 0 15px 0; }
     .login-box input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #444; background: #000; color: #fff; border-radius: 3px; box-sizing: border-box; font-size: 15px; text-align: center; }
     .login-box button { width: 100%; padding: 12px; background: #2787e5; color: #fff; border: none; border-radius: 3px; font-weight: bold; cursor: pointer; font-size: 15px; }
     .login-box button:hover { background: #1a72cb; }
@@ -25,7 +26,7 @@
     .menu-bar span { color: #aaa; cursor: pointer; }
     .menu-bar span:hover { color: #fff; }
     
-    /* Админ-панель */
+    /* Admin-панель */
     .php-admin-panel { background: #1c1c1f; border: 1px solid #2787e5; padding: 15px; border-radius: 4px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) 150px; gap: 10px; align-items: center; }
     .php-admin-panel input, .php-admin-panel select { background: #000; border: 1px solid #444; padding: 8px; color: #fff; border-radius: 3px; }
     
@@ -72,17 +73,17 @@
 </head>
 <body>
 
-  <!-- ВХОДНОЙ БЛОК БЕЗ КОНФЛИКТОВ С ПАМЯТЬЮ -->
+  <!-- КРАСИВАЯ ТЁМНАЯ ФОРМА ВХОДА СНОВА ЗДЕСЬ -->
   <div class="login-wrapper" id="loginWrapper">
     <div class="login-box">
       <h2>PHP BOARD REPLAY v5</h2>
-      <p style="color: #666; font-size: 12px; margin: 5px 0 0 0;">Введите мастер-пароль администратора</p>
+      <p>Введите мастер-пароль администратора</p>
       <input type="password" id="accessKey" placeholder="Пароль">
       <button onclick="processLogin()">Войти на форум</button>
     </div>
   </div>
 
-  <!-- ОСНОВНОЙ ДВИЖОК ФОРУМА -->
+  <!-- ДВИЖОК ФОРУМА (ОТКРОЕТСЯ ПОСЛЕ НАЖАТИЯ) -->
   <div class="forum-wrapper" id="forumContainer">
     <header>
       <div class="logo-text" onclick="returnToMain()">⚽ ReplayForum Engine</div>
@@ -125,4 +126,3 @@
       <div class="editor-box" style="margin-bottom:15px; margin-top:0;">
         <h3 style="margin:0 0 10px 0; color:#2787e5;">+ Создать новую тему в этом разделе</h3>
         <input type="text" id="newTopicName" placeholder="Заголовок темы / Название матча" style="background:#000; border:1px solid #444; color:#fff; padding:8px; width:100%; border-radius:3px; margin-bottom:10px; box-sizing:border-box;">
-        <select id="topicAuthorSelect" style="background:#000; border:1px solid #444; color:#fff; padding:8px; border-radius:3px; margin-bottom:10px;"><option value="Admin">Admin</option><option value="GaLaTaMaN">GaLaTaMaN</option><option value="Guest">Guest</option></select>
