@@ -19,15 +19,16 @@
     /* Оболочка маскировки плеера */
     .vk-player-wrapper { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; cursor: pointer; overflow: hidden; border-radius: 4px; margin-top: 15px; }
     .rumble-iframe { width: 100% !important; height: 100% !important; position: absolute; top: 0; left: 0; z-index: 1; border: none; }
-    .vk-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.3s ease; }
-    .vk-top-bar { position: absolute; top: 0; left: 0; width: 100%; padding: 12px; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); color: #fff; font-size: 14px; display: flex; align-items: center; box-sizing: border-box; }
+    .rumble-iframe iframe { width: 100% !important; height: 100% !important; border: none; }
+    .vk-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9999 !important; display: flex; justify-content: center; align-items: center; transition: opacity 0.3s ease; }
+    .vk-top-bar { position: absolute; top: 0; left: 0; width: 100%; padding: 12px; background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent); color: #fff; font-size: 14px; display: flex; align-items: center; box-sizing: border-box; }
     .vk-logo { width: 20px; height: 20px; margin-right: 10px; }
-    .vk-play-btn { width: 64px; height: 64px; background: rgba(0, 0, 0, 0.7); border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: transform 0.2s ease, background 0.2s ease; }
+    .vk-play-btn { width: 64px; height: 64px; background: rgba(0, 0, 0, 0.8); border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: transform 0.2s ease, background 0.2s ease; }
     .vk-player-wrapper:hover .vk-play-btn { transform: scale(1.1); background: #2787e5; }
   </style>
   
-  <!-- СКРИПТ ПЛЕЕРА RUMBLE -->
-  <script>!function(r,u,m,b,l,e){r._Rumble=b,r[b]||(r[b]=function(){(r[b]._.push(arguments);if(r[b]._.length==1){l=u.createElement(m),e=u.getElementsByTagName(m)[0],l.async=1,l.src="https://rumble.com/embedJS/u4pswji"+(arguments[1].video?'.'+arguments[1].video:'')+"/?url="+encodeURIComponent(location.href)+"&args="+encodeURIComponent(JSON.stringify([].slice.apply(arguments))),e.parentNode.insertBefore(l,e)}})}(window, document, "script", "Rumble");</script>
+  <!-- ИСПРАВЛЕННЫЙ СКРИПТ ПЛЕЕРА RUMBLE -->
+  <script>!function(r,u,m,b,l,e){r._Rumble=b,r[b]||(r[b]=function(){(r[b]._.push(arguments);if(r[b]._.length==1){l=u.createElement(m),e=u.getElementsByTagName(m),l.async=1,l.src="https://rumble.com"+(arguments.video?'.'+arguments.video:'')+"/?url="+encodeURIComponent(location.href)+"&args="+encodeURIComponent(JSON.stringify([].slice.apply(arguments))),e.parentNode.insertBefore(l,e)}})(window, document, "script", "Rumble");</script>
 </head>
 <body>
 
@@ -51,7 +52,7 @@
       <!-- Блок плеера с маской ВК -->
       <div class="vk-player-wrapper" id="playerWrapper" onclick="startVideo()">
         
-        <!-- Сюда встроен твой плеер Rumble -->
+        <!-- Твой плеер Rumble -->
         <div id="rumble_v79e16g" class="rumble-iframe"></div>
         <script>Rumble("play", {"video":"v79e16g","div":"rumble_v79e16g"});</script>
 
@@ -94,10 +95,12 @@
     // Скрипт исчезновения обложки ВК при старте видео
     function startVideo() {
       var overlay = document.getElementById('vkOverlay');
-      overlay.style.opacity = '0';
-      setTimeout(function() {
-        overlay.style.display = 'none';
-      }, 300);
+      if (overlay) {
+        overlay.style.opacity = '0';
+        setTimeout(function() {
+          overlay.style.display = 'none';
+        }, 300);
+      }
     }
   </script>
 </body>
