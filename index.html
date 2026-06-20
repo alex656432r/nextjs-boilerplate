@@ -6,11 +6,14 @@
   <title>🔒 Закрытый Форум Сообщества</title>
   <style>
     body { background: #121212; color: #fff; font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-    .login-box { background: #1e1e1e; padding: 30px; border-radius: 8px; text-align: center; width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-top: 20vh; }
+    
+    /* Стили окна авторизации */
+    .login-box { background: #1e1e1e; padding: 30px; border-radius: 8px; text-align: center; width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-top: 20vh; display: block; }
     input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #333; background: #2a2a2a; color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
     button { width: 100%; padding: 12px; background: #2787e5; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; }
     button:hover { background: #2174c7; }
     
+    /* Стили главного форума */
     .wrapper { display: none; width: 100%; max-width: 1100px; padding: 20px; box-sizing: border-box; }
     header { background: #1a1a1a; padding: 15px 20px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border: 1px solid #2d2d2d; }
     .logo { font-size: 22px; font-weight: bold; color: #2787e5; text-decoration: none; cursor: pointer; }
@@ -26,6 +29,7 @@
     .forum-stats { color: #aaa; font-size: 14px; text-align: center; }
     .forum-lastpost { font-size: 13px; color: #ccc; }
     
+    /* Стили страниц подразделов */
     .section-page { display: none; width: 100%; }
     .back-btn { display: inline-block; background: #333; color: #fff; padding: 8px 15px; border-radius: 4px; font-size: 14px; margin-bottom: 20px; cursor: pointer; border: 1px solid #444; }
     .back-btn:hover { background: #444; }
@@ -35,10 +39,6 @@
     .topic-row:last-child { border-bottom: none; }
     .topic-link { color: #fff; font-weight: bold; text-decoration: none; cursor: pointer; font-size: 15px; }
     .topic-link:hover { color: #2787e5; }
-    
-    .video-view-page { display: none; width: 100%; background: #1a1a1a; border: 1px solid #2d2d2d; border-radius: 6px; padding: 25px; box-sizing: border-box; }
-    .player-box { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; overflow: hidden; margin-top: 20px; border: 1px solid #333; }
-    iframe { width: 100%; height: 100%; border: none; }
   </style>
 </head>
 <body>
@@ -58,7 +58,7 @@
       <div style="font-size: 14px; color: #aaa;">Привет, <b>Admin</b>!</div>
     </header>
 
-    <!-- ТАБЛИЦЫ КАТЕГОРИЙ И РАЗДЕЛОВ -->
+    <!-- ТАБЛИЦЫ КАТЕГОРИЙ И РАЗДЕЛОВ (ГЛАВНАЯ) -->
     <div id="mainForumPage">
       
       <!-- КАТЕГОРИЯ 1 -->
@@ -69,7 +69,7 @@
             <span class="forum-link" onclick="openSection('fifa')">FIFA World Cup 2026</span>
             <div class="forum-desc">Полные записи матчей Чемпионата Мира 2026 в 4K качестве.</div>
           </div>
-          <div class="forum-stats">15 тем</div>
+          <div class="forum-stats">3 темы</div>
           <div class="forum-lastpost">Пост от <span style="color:#2787e5">Admin</span><br><small>Только что</small></div>
         </div>
         <div class="forum-row">
@@ -77,7 +77,7 @@
             <span class="forum-link" onclick="openSection('euro')">UEFA Euro 2024</span>
             <div class="forum-desc">Архив всех поединков Чемпионата Европы.</div>
           </div>
-          <div class="forum-stats">52 темы</div>
+          <div class="forum-stats">2 темы</div>
           <div class="forum-lastpost">Пост от <span style="color:#2787e5">GaLaTaMaN</span><br><small>Вчера</small></div>
         </div>
       </div>
@@ -90,7 +90,7 @@
             <span class="forum-link" onclick="openSection('ucl')">UEFA Champions League</span>
             <div class="forum-desc">Лига Чемпионов УЕФА — Плей-офф и Финалы.</div>
           </div>
-          <div class="forum-stats">124 темы</div>
+          <div class="forum-stats">2 темы</div>
           <div class="forum-lastpost">Пост от <span style="color:#2787e5">Admin</span><br><small>3 часа назад</small></div>
         </div>
         <div class="forum-row">
@@ -98,80 +98,53 @@
             <span class="forum-link" onclick="openSection('uel')">UEFA Europa League</span>
             <div class="forum-desc">Записи трансляций Лиги Европы.</div>
           </div>
-          <div class="forum-stats">88 тем</div>
+          <div class="forum-stats">1 тема</div>
           <div class="forum-lastpost">Пост от <span style="color:#2787e5">User777</span><br><small>2 дня назад</small></div>
         </div>
       </div>
 
     </div>
 
-    <!-- СТРАНИЦА РАЗДЕЛА (СПИСОК ТЕМ) -->
+    <!-- СТРАНИЦА ПОДРАЗДЕЛА (СПИСОК ТЕМ С МЕСТОМ ДЛЯ ТВОЕГО КОДА) -->
     <div class="section-page" id="sectionPage">
       <div class="back-btn" onclick="showMain()">← Назад к разделам</div>
       <h2 id="sectionTitle">Раздел</h2>
       <div class="topics-list" id="topicsContainer">
-        <!-- Темы генерируются скриптом -->
-      </div>
-    </div>
-
-    <!-- СТРАНИЦА СМОТРЕТЬ ВИДЕО -->
-    <div class="video-view-page" id="videoPage">
-      <div class="back-btn" id="videoBackBtn">← Назад к списку тем</div>
-      <h2 id="videoTitle">Название матча</h2>
-      <p style="color:#888; font-size:13px;">Опубликовано администратором сообщества.</p>
-      <div class="player-box">
-        <!-- НЕУБИВАЕМЫЙ ОБХОД БЛОКИРОВОК (EMBED ССЫЛКА С ПУБЛИЧНЫМ ID РОЛИКА) -->
-        <iframe id="videoPlayer" src="" allowfullscreen></iframe>
+        <!-- Темы генерируются автоматически -->
       </div>
     </div>
 
   </div>
 
+  <!-- ЖЕСТКИЙ СКРИПТ ПРОВЕРКИ И ПЕРЕКЛЮЧЕНИЯ СТРАНИЦ -->
   <script>
     const SECRET = "Px3#WkdDnkab6B;";
-    let currentSection = '';
 
-    // База данных форума (Разделы -> Темы -> Видео)
+    // База данных разделов и тем
     const db = {
       fifa: {
         title: "FIFA World Cup 2026",
-        topics: [
-          { title: "Финал: Аргентина vs Франция [Полный матч] 4K", videoId: "v79e16g" },
-          { title: "Полуфинал: Бразилия vs Германия [Обзор]", videoId: "v79e16g" },
-          { title: "Групповой этап: Испания vs Италия [Полный матч]", videoId: "v79e16g" }
-        ]
+        topics: ["Финал: Аргентина vs Франция [Полный матч] 4K", "Полуфинал: Бразилия vs Германия [Обзор]", "Групповой этап: Испания vs Италия [Полный матч]"]
       },
       euro: {
         title: "UEFA Euro 2024",
-        topics: [
-          { title: "Финал: Испания vs Англия [Запись трансляции]", videoId: "v79e16g" },
-          { title: "Обзор лучших голов турнира", videoId: "v79e16g" }
-        ]
+        topics: ["Финал: Испания vs Англия [Запись трансляции]", "Обзор лучших голов турнира"]
       },
       ucl: {
         title: "UEFA Champions League",
-        topics: [
-          { title: "Реал Мадрид vs Боруссия Д [Финал UCL]", videoId: "v79e16g" },
-          { title: "Манчестер Сити vs Реал Мадрид [1/4 финала]", videoId: "v79e16g" }
-        ]
+        topics: ["Реал Мадрид vs Боруссия Д [Финал UCL]", "Манчестер Сити vs Реал Мадрид [1/4 финала]"]
       },
       uel: {
         title: "UEFA Europa League",
-        topics: [
-          { title: "Аталанта vs Байер Леверкузен [Финал]", videoId: "v79e16g" }
-        ]
+        topics: ["Аталанта vs Байер Леверкузен [Финал]"]
       }
     };
 
-    if (localStorage.getItem("forum_auth") === SECRET) {
-      document.getElementById("loginBox").style.display = "none";
-      document.getElementById("forumContainer").style.display = "block";
-    }
-
+    // Функция проверки пароля при клике на синюю кнопку
     function checkPassword() {
       const input = document.getElementById("pass").value;
       if (input === SECRET) {
-        localStorage.setItem("forum_auth", SECRET);
+        localStorage.setItem("forum_auth_v2", SECRET);
         document.getElementById("loginBox").style.display = "none";
         document.getElementById("forumContainer").style.display = "block";
       } else {
@@ -179,32 +152,35 @@
       }
     }
 
+    // Проверка, если админ заходил ранее
+    if (localStorage.getItem("forum_auth_v2") === SECRET) {
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("forumContainer").style.display = "block";
+    }
+
+    // Логика перехода по разделам форума
     function openSection(id) {
-      currentSection = id;
       document.getElementById("mainForumPage").style.display = "none";
-      document.getElementById("videoPage").style.display = "none";
       document.getElementById("sectionPage").style.display = "block";
-      
       document.getElementById("sectionTitle").innerText = "Раздел: " + db[id].title;
       
       let html = '';
-      db[id].topics.forEach((topic, index) => {
+      db[id].topics.forEach((topic) => {
         html += `
           <div class="topic-row">
-            <span class="topic-link" onclick="openVideo(${index})">${topic.title}</span>
-            <div style="font-size:13px; color:#666; text-align:right;">От: Admin<br>Просмотров: ${150 + index * 12}</div>
+            <span class="topic-link">${topic}</span>
+            <div style="font-size:13px; color:#666; text-align:right;">[Здесь будет твой код плеера]</div>
           </div>
         `;
       });
       document.getElementById("topicsContainer").innerHTML = html;
     }
 
-    function openVideo(index) {
-      const topic = db[currentSection].topics[index];
+    function showMain() {
       document.getElementById("sectionPage").style.display = "none";
-      document.getElementById("videoPage").style.display = "block";
-      document.getElementById("videoTitle").innerText = topic.title;
-      
-      // Генерируем правильный прямой фрейм встраивания
-      document.getElementById("videoPlayer").src = "https://rumble.com" + topic.videoId + "/";
-      
+      document.getElementById("mainForumPage").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
