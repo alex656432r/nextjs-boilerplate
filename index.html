@@ -11,37 +11,39 @@
     button { width: 100%; padding: 12px; background: #2787e5; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; }
     button:hover { background: #2174c7; }
     
-    /* Стили форума */
     .wrapper { display: none; width: 100%; max-width: 1100px; padding: 20px; box-sizing: border-box; }
     header { background: #1a1a1a; padding: 15px 20px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border: 1px solid #2d2d2d; }
     .logo { font-size: 22px; font-weight: bold; color: #2787e5; text-decoration: none; cursor: pointer; }
-    .user-panel { font-size: 14px; color: #aaa; }
     
-    .forum-category { background: #1a1a1a; border: 1px solid #2d2d2d; border-radius: 6px; margin-bottom: 25px; overflow: hidden; }
+    .forum-category { background: #1a1a1a; border: 1px solid #2d2d2d; border-radius: 6px; margin-bottom: 25px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
     .category-title { background: #222; padding: 12px 20px; font-weight: bold; font-size: 16px; border-bottom: 1px solid #2d2d2d; color: #2787e5; }
     
     .forum-row { display: grid; grid-template-columns: 1fr 120px 250px; padding: 15px 20px; border-bottom: 1px solid #252525; align-items: center; }
     .forum-row:last-child { border-bottom: none; }
-    .forum-info .forum-link { color: #fff; font-weight: bold; text-decoration: none; font-size: 16px; cursor: pointer; }
-    .forum-info .forum-link:hover { color: #2787e5; }
+    .forum-link { color: #fff; font-weight: bold; text-decoration: none; font-size: 16px; cursor: pointer; }
+    .forum-link:hover { color: #2787e5; }
     .forum-desc { color: #888; font-size: 13px; margin-top: 4px; }
     .forum-stats { color: #aaa; font-size: 14px; text-align: center; }
     .forum-lastpost { font-size: 13px; color: #ccc; }
     
-    /* Страница со списком тем внутри раздела */
-    .section-page { display: none; background: #1a1a1a; border: 1px solid #2d2d2d; border-radius: 6px; padding: 20px; }
-    .back-btn { display: inline-block; background: #333; color: #fff; padding: 8px 15px; border-radius: 4px; text-decoration: none; font-size: 14px; margin-bottom: 20px; cursor: pointer; }
+    .section-page { display: none; width: 100%; }
+    .back-btn { display: inline-block; background: #333; color: #fff; padding: 8px 15px; border-radius: 4px; font-size: 14px; margin-bottom: 20px; cursor: pointer; border: 1px solid #444; }
     .back-btn:hover { background: #444; }
     
-    /* Блок темы с видео */
-    .topic-box { background: #222; border: 1px solid #333; border-radius: 6px; padding: 20px; margin-top: 15px; }
-    .player-box { width: 100%; max-width: 720px; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; overflow: hidden; margin-top: 15px; }
-    video { width: 100%; height: 100%; object-fit: contain; }
+    .topics-list { background: #1a1a1a; border: 1px solid #2d2d2d; border-radius: 6px; overflow: hidden; }
+    .topic-row { display: grid; grid-template-columns: 1fr 200px; padding: 15px 20px; border-bottom: 1px solid #252525; align-items: center; }
+    .topic-row:last-child { border-bottom: none; }
+    .topic-link { color: #fff; font-weight: bold; text-decoration: none; cursor: pointer; font-size: 15px; }
+    .topic-link:hover { color: #2787e5; }
+    
+    .video-view-page { display: none; width: 100%; background: #1a1a1a; border: 1px solid #2d2d2d; border-radius: 6px; padding: 25px; box-sizing: border-box; }
+    .player-box { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; overflow: hidden; margin-top: 20px; border: 1px solid #333; }
+    iframe { width: 100%; height: 100%; border: none; }
   </style>
 </head>
 <body>
 
-  <!-- ОКНО ВВОДА ПАРОЛЯ -->
+  <!-- ОКНО АВТОРИЗАЦИИ -->
   <div class="login-box" id="loginBox">
     <h2>Доступ ограничен</h2>
     <p style="color: #888; font-size: 14px;">Введите пароль администратора</p>
@@ -49,77 +51,118 @@
     <button onclick="checkPassword()">Войти на форум</button>
   </div>
 
-  <!-- ГЛАВНАЯ СТРАНИЦА ФОРУМА (ГЛАВНАЯ) -->
+  <!-- ГЛАВНАЯ СТРАНИЦА ФОРУМА -->
   <div class="wrapper" id="forumContainer">
     <header>
       <div class="logo" onclick="showMain()">⚽ Replay Forum Pro</div>
-      <div class="user-panel">Привет, <b>Admin</b>! [Панель управления]</div>
+      <div style="font-size: 14px; color: #aaa;">Привет, <b>Admin</b>!</div>
     </header>
 
-    <!-- БЛОК ГЛАВНОЙ СТРАНИЦЫ -->
+    <!-- ТАБЛИЦЫ КАТЕГОРИЙ И РАЗДЕЛОВ -->
     <div id="mainForumPage">
+      
       <!-- КАТЕГОРИЯ 1 -->
       <div class="forum-category">
-        <div class="category-title">WORLD CUP EXCLUSIVE</div>
+        <div class="category-title">WORLD CUP & INTERNATIONAL</div>
         <div class="forum-row">
           <div class="forum-info">
             <span class="forum-link" onclick="openSection('fifa')">FIFA World Cup 2026</span>
-            <div class="forum-desc">June 11 - July 19. Матчи и обзоры в 4K качестве.</div>
+            <div class="forum-desc">Полные записи матчей Чемпионата Мира 2026 в 4K качестве.</div>
           </div>
-          <div class="forum-stats">32 тем</div>
-          <div class="forum-lastpost">
-            <b>Тема 32. Тbackground vs Paraguay</b><br>
-            <span style="color:#666;">10 часов назад от</span> <span style="color:#2787e5;">GaLaTaMaN</span>
+          <div class="forum-stats">15 тем</div>
+          <div class="forum-lastpost">Пост от <span style="color:#2787e5">Admin</span><br><small>Только что</small></div>
+        </div>
+        <div class="forum-row">
+          <div class="forum-info">
+            <span class="forum-link" onclick="openSection('euro')">UEFA Euro 2024</span>
+            <div class="forum-desc">Архив всех поединков Чемпионата Европы.</div>
           </div>
+          <div class="forum-stats">52 темы</div>
+          <div class="forum-lastpost">Пост от <span style="color:#2787e5">GaLaTaMaN</span><br><small>Вчера</small></div>
         </div>
       </div>
 
       <!-- КАТЕГОРИЯ 2 -->
       <div class="forum-category">
-        <div class="category-title">EUROPEAN LEAGUES</div>
+        <div class="category-title">EUROPEAN CLUB COMPETITIONS</div>
         <div class="forum-row">
           <div class="forum-info">
             <span class="forum-link" onclick="openSection('ucl')">UEFA Champions League</span>
-            <div class="forum-desc">Полные записи матчей Лиги Чемпионов УЕФА.</div>
+            <div class="forum-desc">Лига Чемпионов УЕФА — Плей-офф и Финалы.</div>
           </div>
-          <div class="forum-stats">619 тем</div>
-          <div class="forum-lastpost">
-            <b>UCL Magazine 2026</b><br>
-            <span style="color:#666;">Вчера от</span> <span style="color:#2787e5;">Admin</span>
-          </div>
+          <div class="forum-stats">124 темы</div>
+          <div class="forum-lastpost">Пост от <span style="color:#2787e5">Admin</span><br><small>3 часа назад</small></div>
         </div>
+        <div class="forum-row">
+          <div class="forum-info">
+            <span class="forum-link" onclick="openSection('uel')">UEFA Europa League</span>
+            <div class="forum-desc">Записи трансляций Лиги Европы.</div>
+          </div>
+          <div class="forum-stats">88 тем</div>
+          <div class="forum-lastpost">Пост от <span style="color:#2787e5">User777</span><br><small>2 дня назад</small></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- СТРАНИЦА РАЗДЕЛА (СПИСОК ТЕМ) -->
+    <div class="section-page" id="sectionPage">
+      <div class="back-btn" onclick="showMain()">← Назад к разделам</div>
+      <h2 id="sectionTitle">Раздел</h2>
+      <div class="topics-list" id="topicsContainer">
+        <!-- Темы генерируются скриптом -->
       </div>
     </div>
 
-    <!-- СТРАНИЦА ДЛЯ РАЗДЕЛА FIFA WORLD CUP (ОТКРЫВАЕТСЯ ПРИ КЛИКЕ) -->
-    <div class="section-page" id="fifaSection">
-      <div class="back-btn" onclick="showMain()">← Назад на главную</div>
-      <h2>Раздел: FIFA World Cup 2026</h2>
-      
-      <!-- Тема 1 с плеером -->
-      <div class="topic-box">
-        <h3>Тема: Эксклюзивный обзор матча (Rumble Video)</h3>
-        <p style="color:#888; font-size:13px;">Автор: Admin | Опубликовано: Только что</p>
-        <div class="player-box">
-          <!-- НАШ НАДЕЖНЫЙ HTML5 ПЛЕЕР ДЛЯ ВИДЕО v79e16g -->
-          <video src="https://rumble.com" controls allowfullscreen></video>
-        </div>
+    <!-- СТРАНИЦА СМОТРЕТЬ ВИДЕО -->
+    <div class="video-view-page" id="videoPage">
+      <div class="back-btn" id="videoBackBtn">← Назад к списку тем</div>
+      <h2 id="videoTitle">Название матча</h2>
+      <p style="color:#888; font-size:13px;">Опубликовано администратором сообщества.</p>
+      <div class="player-box">
+        <!-- НЕУБИВАЕМЫЙ ОБХОД БЛОКИРОВОК (EMBED ССЫЛКА С ПУБЛИЧНЫМ ID РОЛИКА) -->
+        <iframe id="videoPlayer" src="" allowfullscreen></iframe>
       </div>
-    </div>
-
-    <!-- ЗАГЛУШКА ДЛЯ РАЗДЕЛА UCL -->
-    <div class="section-page" id="uclSection">
-      <div class="back-btn" onclick="showMain()">← Назад на главную</div>
-      <h2>Раздел: UEFA Champions League</h2>
-      <p style="color:#aaa;">В этом разделе пока нет созданных тем. Админ еще не загрузил видео.</p>
     </div>
 
   </div>
 
   <script>
     const SECRET = "Px3#WkdDnkab6B;";
+    let currentSection = '';
 
-    // Проверка авторизации
+    // База данных форума (Разделы -> Темы -> Видео)
+    const db = {
+      fifa: {
+        title: "FIFA World Cup 2026",
+        topics: [
+          { title: "Финал: Аргентина vs Франция [Полный матч] 4K", videoId: "v79e16g" },
+          { title: "Полуфинал: Бразилия vs Германия [Обзор]", videoId: "v79e16g" },
+          { title: "Групповой этап: Испания vs Италия [Полный матч]", videoId: "v79e16g" }
+        ]
+      },
+      euro: {
+        title: "UEFA Euro 2024",
+        topics: [
+          { title: "Финал: Испания vs Англия [Запись трансляции]", videoId: "v79e16g" },
+          { title: "Обзор лучших голов турнира", videoId: "v79e16g" }
+        ]
+      },
+      ucl: {
+        title: "UEFA Champions League",
+        topics: [
+          { title: "Реал Мадрид vs Боруссия Д [Финал UCL]", videoId: "v79e16g" },
+          { title: "Манчестер Сити vs Реал Мадрид [1/4 финала]", videoId: "v79e16g" }
+        ]
+      },
+      uel: {
+        title: "UEFA Europa League",
+        topics: [
+          { title: "Аталанта vs Байер Леверкузен [Финал]", videoId: "v79e16g" }
+        ]
+      }
+    };
+
     if (localStorage.getItem("forum_auth") === SECRET) {
       document.getElementById("loginBox").style.display = "none";
       document.getElementById("forumContainer").style.display = "block";
@@ -136,21 +179,32 @@
       }
     }
 
-    // Логика переключения страниц внутри форума
-    function openSection(sectionId) {
+    function openSection(id) {
+      currentSection = id;
       document.getElementById("mainForumPage").style.display = "none";
-      if(sectionId === 'fifa') {
-        document.getElementById("fifaSection").style.display = "block";
-      } else if(sectionId === 'ucl') {
-        document.getElementById("uclSection").style.display = "block";
-      }
+      document.getElementById("videoPage").style.display = "none";
+      document.getElementById("sectionPage").style.display = "block";
+      
+      document.getElementById("sectionTitle").innerText = "Раздел: " + db[id].title;
+      
+      let html = '';
+      db[id].topics.forEach((topic, index) => {
+        html += `
+          <div class="topic-row">
+            <span class="topic-link" onclick="openVideo(${index})">${topic.title}</span>
+            <div style="font-size:13px; color:#666; text-align:right;">От: Admin<br>Просмотров: ${150 + index * 12}</div>
+          </div>
+        `;
+      });
+      document.getElementById("topicsContainer").innerHTML = html;
     }
 
-    function showMain() {
-      document.getElementById("fifaSection").style.display = "none";
-      document.getElementById("uclSection").style.display = "none";
-      document.getElementById("mainForumPage").style.display = "block";
-    }
-  </script>
-</body>
-</html>
+    function openVideo(index) {
+      const topic = db[currentSection].topics[index];
+      document.getElementById("sectionPage").style.display = "none";
+      document.getElementById("videoPage").style.display = "block";
+      document.getElementById("videoTitle").innerText = topic.title;
+      
+      // Генерируем правильный прямой фрейм встраивания
+      document.getElementById("videoPlayer").src = "https://rumble.com" + topic.videoId + "/";
+      
