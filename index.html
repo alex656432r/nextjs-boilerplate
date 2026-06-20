@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🔒 Закрытый форум</title>
+  <title>🔒 Закрытый плеер</title>
   <style>
     body { background: #121212; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
     .login-box { background: #1e1e1e; padding: 30px; border-radius: 8px; text-align: center; width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
@@ -11,14 +11,9 @@
     button { width: 100%; padding: 12px; background: #2787e5; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; }
     button:hover { background: #2174c7; }
     .forum-container { display: none; width: 100%; max-width: 720px; text-align: center; }
-    .player-box { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; overflow: hidden; margin-top: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative; }
-    /* Настройки для родного плеера Rumble */
-    .rumble-embed { width: 100% !important; height: 100% !important; position: absolute; top: 0; left: 0; }
-    .rumble-embed iframe { width: 100% !important; height: 100% !important; border: none; }
+    .player-box { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; overflow: hidden; margin-top: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    iframe { width: 100%; height: 100%; border: none; }
   </style>
-
-  <!-- РОДНОЙ СКРИПТ КЛЮЧА RUMBLE -->
-  <script>!function(r,u,m,b,l,e){r._Rumble=b,r[b]||(r[b]=function(){(r[b]._.push(arguments);if(r[b]._.length==1){l=u.createElement(m),e=u.getElementsByTagName(m),l.async=1,l.src="https://rumble.com"+(arguments.video?'.'+arguments.video:'')+"/?url="+encodeURIComponent(location.href)+"&args="+encodeURIComponent(JSON.stringify([].slice.apply(arguments))),e.parentNode.insertBefore(l,e)}})(window, document, "script", "Rumble");</script>
 </head>
 <body>
 
@@ -32,19 +27,17 @@
 
   <!-- КОНТЕНТ ПОСЛЕ ВВОДА ПАРОЛЯ -->
   <div class="forum-container" id="forumContainer">
-    <h2>🔒 Твое видео с Rumble</h2>
+    <h2>🔒 Твое видео</h2>
     <div class="player-box">
-      
-      <!-- ТВОЙ ЛИЧНЫЙ ПЛЕЕР, КОТОРЫЙ ТЫ СКИДЫВАЛ -->
-      <div id="rumble_v79e16g" class="rumble-embed"></div>
-      <script>Rumble("play", {"video":"v79e16g","div":"rumble_v79e16g"});</script>
-
+      <!-- Официальный чистый iframe встраивания YouTube -->
+      <iframe src="https://youtube.com" allowfullscreen></iframe>
     </div>
   </div>
 
   <script>
     const SECRET = "Px3#WkdDnkab6B;";
 
+    // Если уже входили ранее — сразу показываем видео
     if (localStorage.getItem("forum_auth") === SECRET) {
       document.getElementById("loginBox").style.display = "none";
       document.getElementById("forumContainer").style.display = "block";
