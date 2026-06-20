@@ -1,7 +1,7 @@
 middleware.js
 import { NextResponse } from 'next/server';
 
-const SECRET_PASSWORD = 'МойСекретныйПароль123';
+const SECRET_PASSWORD = 'Px3#WkdDnkab6B;
 
 export function middleware(req) {
   const url = req.nextUrl.clone();
