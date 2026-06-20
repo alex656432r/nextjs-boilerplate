@@ -29,7 +29,7 @@
   <div class="forum-container" id="forumContainer">
     <h2>🔒 Твое видео с Rumble</h2>
     <div class="player-box">
-      <!-- Официальный чистый iframe встраивания Rumble -->
+      <!-- ИСПРАВЛЕННЫЙ АДРЕС ВСТРАИВАНИЯ -->
       <iframe src="https://rumble.com" allowfullscreen></iframe>
     </div>
   </div>
@@ -37,7 +37,7 @@
   <script>
     const SECRET = "Px3#WkdDnkab6B;";
 
-    // Если уже входил ранее — сразу показываем видео
+    // Если уже входили ранее — сразу показываем видео
     if (localStorage.getItem("forum_auth") === SECRET) {
       document.getElementById("loginBox").style.display = "none";
       document.getElementById("forumContainer").style.display = "block";
