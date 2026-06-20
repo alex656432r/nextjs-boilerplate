@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔒 Закрытый Форум Сообщества</title>
+  <style>
+    body { background: #121212; color: #fff; font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+    .login-box { background: #1e1e1e; padding: 30px; border-radius: 8px; text-align: center; width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-top: 20vh; }
+    input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #333; background: #2a2a2a; color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+    button { width: 100%; padding: 12px; background: #2787e5; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; }
+    button:hover { background: #2174c7; }
+    
+    /* Стили форума */
+    .wrapper { display: none; width: 100%; max-width: 1100px; padding: 20px; box-sizing: border-box; }
+    header { background: #1a1a1a; padding: 15px 20px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border: 1px solid #2d2d2d; }
+    .logo { font-size: 22px; font-weight: bold; color: #2787e5; text-decoration: none; }
+    .user-panel { font-size: 14px; color: #aaa; }
+    
+    .forum-category { background: #1a1a1a; border: 1px solid #2d2d2d; border-radius: 6px; margin-bottom: 25px; overflow: hidden; }
+    .category-title { background: #222; padding: 12px 20px; font-weight: bold; font-size: 16px; border-bottom: 1px solid #2d2d2d; color: #2787e5; }
+    
+    .forum-row { display: grid; grid-template-columns: 1fr 120px 250px; padding: 15px 20px; border-bottom: 1px solid #252525; align-items: center; }
+    .forum-row:last-child { border-bottom: none; }
+    .forum-info a { color: #fff; font-weight: bold; text-decoration: none; font-size: 16px; }
+    .forum-info a:hover { color: #2787e5; }
+    .forum-desc { color: #888; font-size: 13px; margin-top: 4px; }
+    .forum-stats { color: #aaa; font-size: 14px; text-align: center; }
+    .forum-lastpost { font-size: 13px; color: #ccc; }
+    .forum-lastpost a { color: #2787e5; text-decoration: none; font-weight: normal; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+  <!-- ОКНО ВВОДА ПАРОЛЯ -->
+  <div class="login-box" id="loginBox">
+    <h2>Доступ ограничен</h2>
+    <p style="color: #888; font-size: 14px;">Введите пароль администратора</p>
+    <input type="password" id="pass" placeholder="Пароль">
+    <button onclick="checkPassword()">Войти на форум</button>
+  </div>
+
+  <!-- ГЛАВНАЯ СТРАНИЦА ФОРУМА (КАК GALATAMAN) -->
+  <div class="wrapper" id="forumContainer">
+    <header>
+      <a href="#" class="logo">⚽ Replay Forum Pro</a>
+      <div class="user-panel">Привет, <b>Admin</b>! [Панель управления]</div>
+    </header>
+
+    <!-- КАТЕГОРИЯ 1 -->
+    <div class="forum-category">
+      <div class="category-title">WORLD CUP EXCLUSIVE</div>
+      
+      <div class="forum-row">
+        <div class="forum-info">
+          <a href="#">FIFA World Cup 2026</a>
+          <div class="forum-desc">June 11 - July 19. Матчи и обзоры в 4K качестве.</div>
+        </div>
+        <div class="forum-stats">32 тем</div>
+        <div class="forum-lastpost">
+          <b>Тема 32. Тbackground vs Paraguay</b><br>
+          <span style="color:#666;">10 часов назад от</span> <a href="#">GaLaTaMaN</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- КАТЕГОРИЯ 2 -->
+    <div class="forum-category">
+      <div class="category-title">EUROPEAN LEAGUES</div>
+      
+      <div class="forum-row">
+        <div class="forum-info">
+          <a href="#">UEFA Champions League</a>
+          <div class="forum-desc">Полные записи матчей Лиги Чемпионов УЕФА.</div>
+        </div>
+        <div class="forum-stats">619 тем</div>
+        <div class="forum-lastpost">
+          <b>UCL Magazine 2026</b><br>
+          <span style="color:#666;">Вчера от</span> <a href="#">Admin</a>
+        </div>
+      </div>
+
+      <div class="forum-row">
+        <div class="forum-info">
+          <a href="#">Premier League (England)</a>
+          <div class="forum-desc">Матчи Английской Премьер-Лиги.</div>
+        </div>
+        <div class="forum-stats">983 тем</div>
+        <div class="forum-lastpost">
+          <b>Matchday Review 24/25</b><br>
+          <span style="color:#666;">26-05-2025 от</span> <a href="#">Admin</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const SECRET = "Px3#WkdDnkab6B;";
+
+    if (localStorage.getItem("forum_auth") === SECRET) {
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("forumContainer").style.display = "block";
+    }
+
+    function checkPassword() {
+      const input = document.getElementById("pass").value;
+      if (input === SECRET) {
+        localStorage.setItem("forum_auth", SECRET);
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("forumContainer").style.display = "block";
+      } else {
+        alert("Неверный пароль!");
+      }
+    }
+  </script>
+</body>
+</html>
