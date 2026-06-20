@@ -31,7 +31,7 @@
   <!-- ФОРМА ВВОДА ПАРОЛЯ -->
   <div class="login-box" id="loginBox">
     <h2>Доступ ограничен</h2>
-    <p style="color: #888; font-size: 14px;">Введите секретный пароль для входа на forum</p>
+    <p style="color: #888; font-size: 14px;">Введите секретный пароль для входа на форум</p>
     <input type="password" id="pass" placeholder="Пароль">
     <button onclick="checkPassword()">Войти</button>
   </div>
@@ -41,13 +41,14 @@
     <h1>🔒 Закрытый форум сообщества</h1>
     
     <div class="post">
-      <h3>Тема: Наш видеоплеер Rumble</h3>
+      <h3>Тема: Эксклюзивный видеоплеер</h3>
       <p style="color: #aaa; font-size: 14px;">Опубликовано: Только что | Автор: Администратор</p>
-      <p>Ниже встроен рабочий плеер Rumble в маскировке под интерфейс ВКонтакте.</p>
+      <p>Ниже встроен рабочий плеер в маскировке под интерфейс ВКонтакте.</p>
       
       <!-- Блок плеера с маской ВК -->
       <div class="vk-player-wrapper" id="playerWrapper" onclick="startVideo()">
-        <iframe class="rumble-iframe" src="https://rumble.com" allowfullscreen></iframe>
+        <!-- ЗДЕСЬ СТОИТ НАДЕЖНЫЙ YOUTUBE ПЛЕЕР -->
+        <iframe class="rumble-iframe" src="https://youtube.com" allowfullscreen></iframe>
         <div class="vk-overlay" id="vkOverlay">
           <div class="vk-top-bar">
             <img class="vk-logo" src="https://wikimedia.org" alt="VK">
