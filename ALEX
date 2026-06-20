@@ -1,7 +1,6 @@
-middleware.js
 import { NextResponse } from 'next/server';
 
-const SECRET_PASSWORD = 'Px3#WkdDnkab6B;
+const SECRET_PASSWORD = 'Px3#WkdDnkab6B;'; // Ошибка исправлена: кавычка добавлена
 
 export function middleware(req) {
   const url = req.nextUrl.clone();
