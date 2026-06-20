@@ -31,7 +31,7 @@
   <!-- ФОРМА ВВОДА ПАРОЛЯ -->
   <div class="login-box" id="loginBox">
     <h2>Доступ ограничен</h2>
-    <p style="color: #888; font-size: 14px;">Введите секретный пароль для входа на форум</p>
+    <p style="color: #888; font-size: 14px;">Введите секретный пароль для входа на forum</p>
     <input type="password" id="pass" placeholder="Пароль">
     <button onclick="checkPassword()">Войти</button>
   </div>
@@ -63,16 +63,13 @@
   </div>
 
   <script>
-    // Наш секретный пароль
     const SECRET = "Px3#WkdDnkab6B;";
 
-    // Проверяем, заходил ли пользователь ранее
     if (localStorage.getItem("forum_auth") === SECRET) {
       document.getElementById("loginBox").style.display = "none";
       document.getElementById("forumContainer").style.display = "block";
     }
 
-    // Функция проверки пароля
     function checkPassword() {
       const input = document.getElementById("pass").value;
       if (input === SECRET) {
@@ -84,7 +81,6 @@
       }
     }
 
-    // Скрипт исчезновения обложки ВК при старте видео
     function startVideo() {
       var overlay = document.getElementById('vkOverlay');
       overlay.style.opacity = '0';
