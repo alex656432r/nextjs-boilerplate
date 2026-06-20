@@ -1,18 +1,18 @@
-import { NextResponse } from 'next/server';
-
-const SECRET_PASSWORD = 'Px3#WkdDnkab6B;'; // Ошибка исправлена: кавычка добавлена
-
-export function middleware(req) {
-  const url = req.nextUrl.clone();
+export default function middleware(req) {
+  const url = new URL(req.url);
   
-  if (url.pathname.startsWith('/_next') || url.pathname.includes('.')) {
-    return NextResponse.next();
+  // Пропускаем картинки и стили
+  if (url.pathname.includes('.')) {
+    return;
   }
 
-  const hasAccess = req.cookies.get('forum_access')?.value === SECRET_PASSWORD;
+  // Проверяем, введен ли правильный пароль в куки
+  const cookies = req.headers.get('cookie') || '';
+  const hasAccess = cookies.includes('forum_access=Px3#WkdDnkab6B;');
 
+  // Если зашли на страницу логина
   if (url.pathname === '/login') {
-    return new NextResponse(
+    return new Response(
       `<html>
         <head>
           <meta charset="utf-8">
@@ -46,10 +46,8 @@ export function middleware(req) {
     );
   }
 
+  // Если пароля нет — кидаем на страницу ввода пароля
   if (!hasAccess) {
-    url.pathname = '/login';
-    return NextResponse.redirect(url);
+    return Response.redirect(new URL('/login', req.url));
   }
-
-  return NextResponse.next();
 }
