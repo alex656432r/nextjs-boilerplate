@@ -12,7 +12,7 @@
     button:hover { background: #2174c7; }
     .forum-container { display: none; width: 100%; max-width: 720px; text-align: center; }
     .player-box { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; overflow: hidden; margin-top: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-    iframe { width: 100%; height: 100%; border: none; }
+    video { width: 100%; height: 100%; object-fit: contain; background: #000; }
   </style>
 </head>
 <body>
@@ -25,12 +25,12 @@
     <button onclick="checkPassword()">Войти</button>
   </div>
 
-  <!-- ТВОЙ ПЛЕЕР RUMBLE -->
+  <!-- КОНТЕНТ ПОСЛЕ ВВОДА ПАРОЛЯ -->
   <div class="forum-container" id="forumContainer">
     <h2>🔒 Твое видео с Rumble</h2>
     <div class="player-box">
-      <!-- ИСПРАВЛЕННЫЙ ПРЯМОЙ АДРЕС ДЛЯ ТВOЕГО КОДА v79e16g -->
-      <iframe src="https://rumble.com" allowfullscreen></iframe>
+      <!-- НАДЕЖНЫЙ HTML5 ПЛЕЕР БЕЗ СМАЙЛИКОВ И ЛИС -->
+      <video src="https://rumble.com" controls allowfullscreen></video>
     </div>
   </div>
 
