@@ -1,114 +1,161 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🔒 Закрытый форум сообщества</title>
-  <style>
-    body { background: #121212; color: #fff; font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 30px; margin: 0; }
-    .container { width: 100%; max-width: 800px; display: none; }
-    h1 { border-bottom: 1px solid #222; padding-bottom: 15px; font-size: 28px; }
-    .post { background: #1e1e1e; padding: 20px; border-radius: 8px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-    .login-box { background: #1e1e1e; padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); text-align: center; width: 300px; margin-top: 15vh; }
-    input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #333; background: #2a2a2a; color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
-    button { width: 100%; padding: 12px; background: #2787e5; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; }
-    button:hover { background: #2174c7; }
-    .video-wrapper { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 4px; margin-top: 15px; overflow: hidden; }
-    .video-wrapper iframe { width: 100%; height: 100%; border: none; }
-    .video-placeholder { display: flex; justify-content: center; align-items: center; height: 100%; background: #1a1a1a; color: #666; flex-direction: column; gap: 20px; }
-    .video-placeholder .play-icon { font-size: 48px; opacity: 0.5; }
-    .video-placeholder .video-title { font-size: 18px; color: #888; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Закрытый форум сообщества</title>
+    <style>
+        body { background: #121212; color: #fff; font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 800px; display: none; } /* Скрыт до ввода пароля */
+        h1 { border-bottom: 1px solid #222; padding-bottom: 15px; font-size: 28px; display: flex; justify-content: space-between; align-items: center; }
+        .post { background: #1e1e1e; padding: 20px; border-radius: 8px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative; }
+        .login-box { background: #1e1e1e; padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); text-align: center; margin-top: 100px; width: 100%; max-width: 350px; }
+        input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #333; background: #2a2a2a; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        textarea { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #333; background: #2a2a2a; color: #fff; border-radius: 4px; box-sizing: border-box; height: 100px; resize: vertical; }
+        button { width: 100%; padding: 12px; background: #2174c7; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
+        button:hover { background: #2174c7; opacity: 0.9; }
+        .logout-btn { width: auto; padding: 5px 10px; background: #c0392b; font-size: 14px; margin: 0; }
+        .backup-btn { background: #27ae60; margin-top: 15px; }
+        .meta { color: #777; font-size: 12px; margin-bottom: 10px; }
+        .error-msg { color: #ff4a4a; font-size: 14px; margin-top: 10px; display: none; }
+    </style>
 </head>
 <body>
 
-  <div class="login-box" id="loginBox">
-    <h2>Доступ ограничен</h2>
-    <p style="color: #888; font-size: 14px;">Введите секретный пароль для входа на форум</p>
-    <input type="password" id="pass" placeholder="Пароль" onkeydown="if(event.key==='Enter') checkPassword()">
-    <button onclick="checkPassword()">Войти</button>
-    <p id="errorMsg" style="color: #ff4444; font-size: 14px; margin-top: 10px; display: none;">Неверный пароль!</p>
-  </div>
-
-  <div class="container" id="forumContainer">
-    <h1>🔒 Закрытый форум сообщества</h1>
-    <div class="post">
-      <h3>Тема: Наш видеоплеер</h3>
-      <p style="color: #aaa; font-size: 14px;">Опубликовано: Только что | Автор: Администратор</p>
-      
-      <div class="video-wrapper" id="videoWrapper">
-        <!-- Плейсхолдер, который заменится на видео после клика -->
-        <div class="video-placeholder" id="videoPlaceholder">
-          <div class="play-icon">▶</div>
-          <div class="video-title">Нажмите для просмотра видео</div>
-        </div>
-        <!-- Сюда будет загружаться iframe -->
-        <div id="videoContainer" style="display: none; width: 100%; height: 100%;"></div>
-      </div>
-      
-      <p style="color: #666; font-size: 12px; margin-top: 10px;">⚠️ Видео загружается по требованию для экономии трафика</p>
+    <!-- ОКНО ВХОДА (ПАНЕЛЬ АВТОРИЗАЦИИ) -->
+    <div class="login-box" id="loginBox">
+        <h2>Личный доступ</h2>
+        <p style="color: #777; font-size: 14px;">Введите секретный пароль для входа на форум</p>
+        <input type="password" id="passwordInput" placeholder="Ваш пароль..." onkeydown="if(event.key === 'Enter') checkPassword()">
+        <button onclick="checkPassword()">Войти</button>
+        <div class="error-msg" id="errorMsg">Неверный пароль! Доступ заблокирован.</div>
     </div>
-  </div>
 
-  <script>
-    // ⚠️ ВАЖНО: В реальном проекте используйте серверную аутентификацию!
-    // Это только для демонстрации
-    const SECRET = "Px3#WkdDnkab6B;";
-    const SECRET_HASH = btoa(SECRET); // Простое хеширование для примера
-    
-    // Проверка аутентификации
-    if (localStorage.getItem("forum_auth") === SECRET_HASH) {
-      document.getElementById("loginBox").style.display = "none";
-      document.getElementById("forumContainer").style.display = "block";
-    }
+    <!-- ОСНОВНОЙ ФОРУМ (СКРЫТ ПО УМОЛЧАНИЮ) -->
+    <div class="container" id="forumContainer">
+        <h1>
+            🔒 Мой Личный Форум 
+            <button class="logout-btn" onclick="logout()">Выйти</button>
+        </h1>
 
-    function checkPassword() {
-      const input = document.getElementById("pass").value;
-      const errorMsg = document.getElementById("errorMsg");
-      
-      if (input === SECRET) {
-        localStorage.setItem("forum_auth", SECRET_HASH);
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("forumContainer").style.display = "block";
-        errorMsg.style.display = "none";
-      } else {
-        errorMsg.style.display = "block";
-        // Очищаем поле ввода
-        document.getElementById("pass").value = "";
-        document.getElementById("pass").focus();
-      }
-    }
+        <!-- Форма добавления записей -->
+        <div class="post">
+            <h3>Создать новую запись</h3>
+            <input type="text" id="topicTitle" placeholder="Заголовок темы / заметки...">
+            <textarea id="topicText" placeholder="Текст вашей секретной записи..."></textarea>
+            <button onclick="createTopic()">Сохранить на форуме</button>
+        </div>
 
-    // Функция загрузки видео по клику
-    function loadVideo() {
-      const placeholder = document.getElementById('videoPlaceholder');
-      const container = document.getElementById('videoContainer');
-      
-      if (placeholder.style.display !== 'none') {
-        placeholder.style.display = 'none';
-        container.style.display = 'block';
-        
-        // Вставка iframe с видео
-        // Замените VIDEO_ID на реальный ID видео из Rumble
-        const videoId = 'VIDEO_ID'; // Например: 'v3v3v3'
-        container.innerHTML = `
-          <iframe 
-            src="https://rumble.com/embed/${videoId}/?pub=4" 
-            allowfullscreen
-            loading="lazy"
-          ></iframe>
-        `;
-        
-        // Альтернатива: если видео нет, можно вставить тестовое
-        // container.innerHTML = `<video controls style="width:100%;height:100%;"><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video>`;
-      }
-    }
+        <!-- Лента тем -->
+        <div id="topicsList"></div>
 
-    // Обработчик клика по обертке видео
-    document.getElementById('videoWrapper').addEventListener('click', loadVideo);
-    
-    // Также можно добавить кнопку в плейсхолдер
-    document.getElementById('videoPlaceholder').addEventListener('click', loadVideo);
-  </script>
+        <!-- Кнопка резервного копирования на ПК -->
+        <button class="backup-btn" onclick="exportBackup()">💾 Скачать резервную копию данных (Файл .json)</button>
+    </div>
+
+    <script>
+        // НАСТРОЙКА: Измените '1234' на любой свой сложный личный пароль
+        const CORRECT_PASSWORD = '1234'; 
+
+        // Проверка сессии при загрузке страницы
+        if (sessionStorage.getItem('forum_authenticated') === 'true') {
+            showForum();
+        }
+
+        // Функция проверки пароля
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            const error = document.getElementById('errorMsg');
+            
+            if (input === CORRECT_PASSWORD) {
+                sessionStorage.setItem('forum_authenticated', 'true');
+                showForum();
+            } else {
+                error.style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        // Показать форум, если пароль верный
+        function showForum() {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('forumContainer').style.display = 'block';
+            loadTopics();
+        }
+
+        // Выход из системы (сессия сотрется при закрытии вкладки)
+        function logout() {
+            sessionStorage.removeItem('forum_authenticated');
+            window.location.reload();
+        }
+
+        // РАБОТА С ДАННЫМИ (LOCALSTORAGE)
+        function createTopic() {
+            const title = document.getElementById('topicTitle').value.trim();
+            const text = document.getElementById('topicText').value.trim();
+            
+            if (!title || !text) return alert('Заполните заголовок и текст!');
+
+            const topics = JSON.parse(localStorage.getItem('my_private_forum_data')) || [];
+            const newTopic = {
+                id: Date.now(),
+                title: title,
+                text: text,
+                date: new Date().toLocaleString('ru-RU')
+            };
+
+            topics.unshift(newTopic); // Добавляем новую запись в начало списка
+            localStorage.setItem('my_private_forum_data', JSON.stringify(topics));
+
+            // Очищаем форму
+            document.getElementById('topicTitle').value = '';
+            document.getElementById('topicText').value = '';
+            
+            loadTopics();
+        }
+
+        function loadTopics() {
+            const list = document.getElementById('topicsList');
+            const topics = JSON.parse(localStorage.getItem('my_private_forum_data')) || [];
+            list.innerHTML = '';
+
+            if (topics.length === 0) {
+                list.innerHTML = '<p style="color: #555; text-align: center; margin-top: 30px;">Здесь пока нет ни одной приватной записи.</p>';
+                return;
+            }
+
+            topics.forEach(topic => {
+                list.innerHTML += `
+                    <div class="post">
+                        <div class="meta">Создано: ${topic.date}</div>
+                        <h3 style="margin: 0 0 10px 0; color: #2174c7;">${topic.title}</h3>
+                        <p style="margin: 0; line-height: 1.6; white-space: pre-wrap;">${topic.text}</p>
+                        <span style="position: absolute; right: 15px; top: 15px; color: #ff4a4a; cursor: pointer; font-size: 12px;" onclick="deleteTopic(${topic.id})">❌ Удалить</span>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteTopic(id) {
+            if (confirm('Вы уверены, что хотите удалить эту запись?')) {
+                let topics = JSON.parse(localStorage.getItem('my_private_forum_data')) || [];
+                topics = topics.filter(t => t.id !== id);
+                localStorage.setItem('my_private_forum_data', JSON.stringify(topics));
+                loadTopics();
+            }
+        }
+
+        // Резервное копирование в файл на жесткий диск ПК
+        function exportBackup() {
+            const data = localStorage.getItem('my_private_forum_data');
+            if (!data || data === '[]') return alert('Нет данных для сохранения!');
+            
+            const blob = new Blob([data], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `forum_backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+        }
+    </script>
 </body>
 </html>
