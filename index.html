@@ -17,7 +17,6 @@
         .logout-btn { width: auto; padding: 5px 10px; background: #c0392b; font-size: 14px; margin: 0; }
         .backup-zone { display: flex; gap: 10px; margin-top: 20px; }
         .backup-btn { background: #27ae60; margin: 0; }
-        .import-btn { background: #e67e22; margin: 0; }
         .meta { color: #777; font-size: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; }
         .badge { background: #34495e; padding: 2px 8px; border-radius: 3px; color: #ecf0f1; font-weight: bold; }
         .error-msg { color: #ff4a4a; font-size: 14px; margin-top: 10px; display: none; }
@@ -47,7 +46,6 @@
             <h3>Создать новую запись</h3>
             <div style="display: flex; gap: 10px;">
                 <input type="text" id="topicTitle" placeholder="Заголовок темы / заметки..." style="flex: 2;">
-                <!-- Выбор категории -->
                 <select id="topicCategory" style="flex: 1;">
                     <option value="Общее">📁 Общее</option>
                     <option value="Личное">🔒 Личное</option>
@@ -76,11 +74,9 @@
         <!-- Лента тем -->
         <div id="topicsList"></div>
 
-        <!-- Зона бэкапа и восстановления -->
+        <!-- Зона бэкапа -->
         <div class="backup-zone">
             <button class="backup-btn" onclick="exportBackup()">💾 Скачать бэкап (.json)</button>
-            <button class="import-btn" onclick="document.getElementById('importFile').click()">📂 Восстановить из файла</button>
-            <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importBackup(this)">
         </div>
     </div>
 
@@ -121,7 +117,7 @@
             const text = document.getElementById('topicText').value.trim();
             const category = document.getElementById('topicCategory').value;
             
-            if (!title || !text) return alert('Заполните заголовок и текст!');
+            if (!title || !text) return alert('Заполните заголовок и text!');
 
             const topics = JSON.parse(localStorage.getItem('my_private_forum_data')) || [];
             topics.unshift({
@@ -146,7 +142,6 @@
             
             list.innerHTML = '';
 
-            // Фильтрация данных
             const filteredTopics = topics.filter(topic => {
                 const matchesCategory = (selectedCategory === 'Все' || topic.category === selectedCategory);
                 const matchesSearch = (topic.title.toLowerCase().includes(searchQuery) || topic.text.toLowerCase().includes(searchQuery));
@@ -191,6 +186,6 @@
             a.download = `forum_backup_${new Date().toISOString().slice(0,10)}.json`;
             a.click();
         }
-
-        // Функция импорта (Восстановления базы из файла)
-        function importBackup(input) {
+    </script>
+</body>
+</html>
