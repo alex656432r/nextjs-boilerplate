@@ -3,126 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FOOTBALL REPLAY BOARD</title>
+  <title>🔒 Закрытый форум сообщества</title>
   <style>
-    body { background: #0e0e10; color: #e4e4e6; font-family: Verdana, Arial, sans-serif; font-size: 13px; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-    
-    /* Красивая форма авторизации - теперь соединена в одном файле */
-    .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; position: fixed; top: 0; left: 0; background: #0e0e10; z-index: 99999; }
-    .login-box { background: #1a1a1a; padding: 35px; border-radius: 4px; text-align: center; width: 350px; box-shadow: 0 4px 25px rgba(0,0,0,0.6); border: 1px solid #333; }
-    .login-box h2 { margin: 0 0 10px 0; font-size: 18px; color: #fff; font-weight: bold; }
-    .login-box p { color: #666; font-size: 12px; margin: 0 0 15px 0; }
-    .login-box input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #444; background: #000; color: #fff; border-radius: 3px; box-sizing: border-box; font-size: 15px; text-align: center; }
-    .login-box button { width: 100%; padding: 12px; background: #2787e5; color: #fff; border: none; border-radius: 3px; font-weight: bold; cursor: pointer; font-size: 15px; }
-    .login-box button:hover { background: #1a72cb; }
-    
-    /* Контейнер форума */
-    .forum-wrapper { display: none; width: 100%; max-width: 1200px; padding: 15px; box-sizing: border-box; }
-    
-    /* Шапка в стиле PHP-движков */
-    header { background: #141414; padding: 20px; border-radius: 4px; margin-bottom: 15px; border: 1px solid #2d2d2d; }
-    .logo-text { font-size: 26px; font-weight: bold; color: #2787e5; text-decoration: none; cursor: pointer; }
-    .menu-bar { background: #222; padding: 8px 12px; margin-top: 15px; border-radius: 3px; font-size: 12px; display: flex; gap: 15px; border: 1px solid #333; }
-    .menu-bar span { color: #aaa; cursor: pointer; }
-    .menu-bar span:hover { color: #fff; }
-    
-    /* Admin-панель */
-    .php-admin-panel { background: #1c1c1f; border: 1px solid #2787e5; padding: 15px; border-radius: 4px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) 150px; gap: 10px; align-items: center; }
-    .php-admin-panel input, .php-admin-panel select { background: #000; border: 1px solid #444; padding: 8px; color: #fff; border-radius: 3px; }
-    
-    /* Таблицы категорий */
-    .forum-category { background: #141414; border: 1px solid #2d2d2d; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
-    .category-header { background: #222; padding: 10px 15px; font-weight: bold; font-size: 14px; color: #2787e5; border-bottom: 1px solid #2d2d2d; }
-    .table-header { display: grid; grid-template-columns: 1fr 80px 80px 240px; padding: 8px 15px; background: #1a1a1a; font-size: 11px; color: #888; font-weight: bold; border-bottom: 1px solid #2d2d2d; }
-    .forum-row { display: grid; grid-template-columns: 1fr 80px 80px 240px; padding: 12px 15px; border-bottom: 1px solid #222; align-items: center; }
-    .forum-row:last-child { border-bottom: none; }
-    .forum-row:hover { background: #1c1c1c; }
-    
-    .forum-title { color: #fff; font-weight: bold; font-size: 14px; cursor: pointer; }
-    .forum-title:hover { color: #2787e5; }
-    .forum-desc { color: #888; font-size: 12px; margin-top: 3px; }
-    .cell-center { text-align: center; color: #aaa; }
-    .last-post-cell { font-size: 11px; color: #ccc; border-left: 1px solid #222; padding-left: 10px; }
-    
-    /* Список тем */
-    .section-page { display: none; width: 100%; }
-    .topics-table { background: #141414; border: 1px solid #2d2d2d; border-radius: 4px; overflow: hidden; }
-    .topics-header { display: grid; grid-template-columns: 1fr 120px 180px; padding: 10px 15px; background: #222; font-weight: bold; color: #2787e5; border-bottom: 1px solid #2d2d2d; }
-    .topic-row { display: grid; grid-template-columns: 1fr 120px 180px; padding: 12px 15px; border-bottom: 1px solid #222; align-items: center; }
-    .topic-row:hover { background: #1c1c1c; }
-    .topic-title { font-weight: bold; color: #fff; cursor: pointer; }
-    .topic-title:hover { color: #2787e5; }
-    
-    /* Посты */
-    .topic-view-page { display: none; width: 100%; }
-    .post-container { background: #141414; border: 1px solid #2d2d2d; border-radius: 4px; margin-top: 10px; display: grid; grid-template-columns: 180px 1fr; min-height: 120px; }
-    .post-author-zone { background: #1a1a1a; padding: 15px; border-right: 1px solid #2d2d2d; text-align: center; }
-    .author-avatar { width: 50px; height: 50px; background: #333; margin: 0 auto 10px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: #aaa; }
-    .author-name { font-weight: bold; color: #2787e5; font-size: 13px; }
-    .author-status { font-size: 11px; color: #888; margin-top: 3px; }
-    .post-content-zone { padding: 20px; font-size: 13px; line-height: 1.5; color: #e4e4e6; }
-    
-    /* Редактор */
-    .editor-box { background: #141414; border: 1px solid #2d2d2d; padding: 15px; border-radius: 4px; margin-top: 15px; }
-    .editor-box textarea { width: 100%; background: #000; border: 1px solid #444; color: #fff; padding: 10px; font-family: monospace; font-size: 13px; resize: vertical; box-sizing: border-box; }
-    
-    /* Статистика */
-    .forum-stats-block { background: #141414; border: 1px solid #2d2d2d; border-radius: 4px; padding: 15px; margin-top: 20px; font-size: 12px; }
-    .stats-title { font-weight: bold; color: #2787e5; border-bottom: 1px solid #2d2d2d; padding-bottom: 5px; margin-bottom: 8px; text-transform: uppercase; }
+    body { background: #121212; color: #fff; font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 30px; margin: 0; }
+    .container { width: 100%; max-width: 800px; display: none; }
+    h1 { border-bottom: 1px solid #222; padding-bottom: 15px; font-size: 28px; }
+    .post { background: #1e1e1e; padding: 20px; border-radius: 8px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    .login-box { background: #1e1e1e; padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); text-align: center; width: 300px; margin-top: 15vh; }
+    input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #333; background: #2a2a2a; color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+    button { width: 100%; padding: 12px; background: #2787e5; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; }
+    button:hover { background: #2174c7; }
+    .video-wrapper { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 4px; margin-top: 15px; overflow: hidden; }
+    .video-wrapper iframe { width: 100%; height: 100%; border: none; }
+    .video-placeholder { display: flex; justify-content: center; align-items: center; height: 100%; background: #1a1a1a; color: #666; flex-direction: column; gap: 20px; }
+    .video-placeholder .play-icon { font-size: 48px; opacity: 0.5; }
+    .video-placeholder .video-title { font-size: 18px; color: #888; }
   </style>
 </head>
 <body>
 
-  <!-- КРАСИВАЯ ТЁМНАЯ ФОРМА ВХОДА СНОВА ЗДЕСЬ -->
-  <div class="login-wrapper" id="loginWrapper">
-    <div class="login-box">
-      <h2>PHP BOARD REPLAY v5</h2>
-      <p>Введите мастер-пароль администратора</p>
-      <input type="password" id="accessKey" placeholder="Пароль">
-      <button onclick="processLogin()">Войти на форум</button>
+  <div class="login-box" id="loginBox">
+    <h2>Доступ ограничен</h2>
+    <p style="color: #888; font-size: 14px;">Введите секретный пароль для входа на форум</p>
+    <input type="password" id="pass" placeholder="Пароль" onkeydown="if(event.key==='Enter') checkPassword()">
+    <button onclick="checkPassword()">Войти</button>
+    <p id="errorMsg" style="color: #ff4444; font-size: 14px; margin-top: 10px; display: none;">Неверный пароль!</p>
+  </div>
+
+  <div class="container" id="forumContainer">
+    <h1>🔒 Закрытый форум сообщества</h1>
+    <div class="post">
+      <h3>Тема: Наш видеоплеер</h3>
+      <p style="color: #aaa; font-size: 14px;">Опубликовано: Только что | Автор: Администратор</p>
+      
+      <div class="video-wrapper" id="videoWrapper">
+        <!-- Плейсхолдер, который заменится на видео после клика -->
+        <div class="video-placeholder" id="videoPlaceholder">
+          <div class="play-icon">▶</div>
+          <div class="video-title">Нажмите для просмотра видео</div>
+        </div>
+        <!-- Сюда будет загружаться iframe -->
+        <div id="videoContainer" style="display: none; width: 100%; height: 100%;"></div>
+      </div>
+      
+      <p style="color: #666; font-size: 12px; margin-top: 10px;">⚠️ Видео загружается по требованию для экономии трафика</p>
     </div>
   </div>
 
-  <!-- ДВИЖОК ФОРУМА (ОТКРОЕТСЯ ПОСЛЕ НАЖАТИЯ) -->
-  <div class="forum-wrapper" id="forumContainer">
-    <header>
-      <div class="logo-text" onclick="returnToMain()">⚽ ReplayForum Engine</div>
-      <div class="menu-bar">
-        <span onclick="returnToMain()">Главная страница</span>
-        <span onclick="alert('Вы вошли под аккаунтом главного суперадмина.')">Пользователи</span>
-        <span onclick="alert('Все сессии зашифрованы локально.')">Безопасность</span>
-      </div>
-    </header>
+  <script>
+    // ⚠️ ВАЖНО: В реальном проекте используйте серверную аутентификацию!
+    // Это только для демонстрации
+    const SECRET = "Px3#WkdDnkab6B;";
+    const SECRET_HASH = btoa(SECRET); // Простое хеширование для примера
+    
+    // Проверка аутентификации
+    if (localStorage.getItem("forum_auth") === SECRET_HASH) {
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("forumContainer").style.display = "block";
+    }
 
-    <div id="mainDashboard">
-      <div class="php-admin-panel">
-        <input type="text" id="panelForumTitle" placeholder="Имя нового подраздела">
-        <input type="text" id="panelForumDesc" placeholder="Описание категории">
-        <select id="panelCategorySelect">
-          <option value="intl">INTERNATIONAL (СБОРНЫЕ)</option>
-          <option value="euro">EUROCUBS (ЕВРОКУБКИ)</option>
-          <option value="top5">TOP LEAGUES (ЧЕМПИОНАТЫ)</option>
-          <option value="other">RETRO & COMMUNITY</option>
-        </select>
-        <button class="menu-bar" style="margin:0; padding:8px; justify-content:center;" onclick="addForumRowFromPanel()">+ Создать раздел</button>
-      </div>
-
-      <div class="forum-category" id="cat_intl"><div class="category-header">🏆 International Tournaments</div><div class="table-header"><div>Форум</div><div style="text-align:center;">Темы</div><div style="text-align:center;">Посты</div><div>Последнее сообщение</div></div><div id="box_intl"></div></div>
-      <div class="forum-category" id="cat_euro"><div class="category-header">🇪🇺 UEFA Club Competitions</div><div class="table-header"><div>Форум</div><div style="text-align:center;">Темы</div><div style="text-align:center;">Посты</div><div>Последнее сообщение</div></div><div id="box_euro"></div></div>
-      <div class="forum-category" id="cat_top5"><div class="category-header">⚽ Domestic European Leagues</div><div class="table-header"><div>Форум</div><div style="text-align:center;">Темы</div><div style="text-align:center;">Посты</div><div>Последнее сообщение</div></div><div id="box_top5"></div></div>
-      <div class="forum-category" id="cat_other"><div class="category-header">💬 Retro, Media & Community</div><div class="table-header"><div>Форум</div><div style="text-align:center;">Темы</div><div style="text-align:center;">Посты</div><div>Последнее сообщение</div></div><div id="box_other"></div></div>
-
-      <div class="forum-stats-block">
-        <div class="stats-title">📊 Статистика нашего форума</div>
-        <div>На форуме сообщений: <b id="stat_posts">1</b> | Тем: <b id="stat_topics">1</b> | Пользователей: <b>12</b></div>
-        <div style="margin-top:5px; color:#aaa;">Сейчас онлайн: <span style="color:#2787e5; font-weight:bold;">Admin</span>, <span style="color:#fff">GaLaTaMaN</span>, Guest_302, Guest_412 (Всего: 4)</div>
-      </div>
-    </div>
-
-    <div class="section-page" id="topicsView">
-      <div class="menu-bar" style="margin-bottom:15px;"><span onclick="returnToMain()">← Назад к категориям</span></div>
-      <h2 id="sectionTitle" style="color:#fff;">Раздел форума</h2>
+    function checkPassword() {
+      const input = document.getElementById("pass").value;
+      const errorMsg = document.getElementById("errorMsg");
       
-      <div class="editor-box" style="margin-bottom:15px; margin-top:0;">
-        <h3 style="margin:0 0 10px 0; color:#2787e5;">+ Создать новую тему в этом разделе</h3>
-        <input type="text" id="newTopicName" placeholder="Заголовок темы / Название матча" style="background:#000; border:1px solid #444; color:#fff; padding:8px; width:100%; border-radius:3px; margin-bottom:10px; box-sizing:border-box;">
+      if (input === SECRET) {
+        localStorage.setItem("forum_auth", SECRET_HASH);
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("forumContainer").style.display = "block";
+        errorMsg.style.display = "none";
+      } else {
+        errorMsg.style.display = "block";
+        // Очищаем поле ввода
+        document.getElementById("pass").value = "";
+        document.getElementById("pass").focus();
+      }
+    }
+
+    // Функция загрузки видео по клику
+    function loadVideo() {
+      const placeholder = document.getElementById('videoPlaceholder');
+      const container = document.getElementById('videoContainer');
+      
+      if (placeholder.style.display !== 'none') {
+        placeholder.style.display = 'none';
+        container.style.display = 'block';
+        
+        // Вставка iframe с видео
+        // Замените VIDEO_ID на реальный ID видео из Rumble
+        const videoId = 'VIDEO_ID'; // Например: 'v3v3v3'
+        container.innerHTML = `
+          <iframe 
+            src="https://rumble.com/embed/${videoId}/?pub=4" 
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        `;
+        
+        // Альтернатива: если видео нет, можно вставить тестовое
+        // container.innerHTML = `<video controls style="width:100%;height:100%;"><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video>`;
+      }
+    }
+
+    // Обработчик клика по обертке видео
+    document.getElementById('videoWrapper').addEventListener('click', loadVideo);
+    
+    // Также можно добавить кнопку в плейсхолдер
+    document.getElementById('videoPlaceholder').addEventListener('click', loadVideo);
+  </script>
+</body>
+</html>
