@@ -10,14 +10,18 @@
         h1 { border-bottom: 1px solid #222; padding-bottom: 15px; font-size: 28px; display: flex; justify-content: space-between; align-items: center; }
         .post { background: #1e1e1e; padding: 20px; border-radius: 8px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative; }
         .login-box { background: #1e1e1e; padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); text-align: center; margin-top: 100px; width: 100%; max-width: 350px; }
-        input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #333; background: #2a2a2a; color: #fff; border-radius: 4px; box-sizing: border-box; }
-        textarea { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #333; background: #2a2a2a; color: #fff; border-radius: 4px; box-sizing: border-box; height: 100px; resize: vertical; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #333; background: #2a2a2a; color: #fff; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
+        textarea { height: 100px; resize: vertical; }
         button { width: 100%; padding: 12px; background: #2174c7; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
         button:hover { background: #2174c7; opacity: 0.9; }
         .logout-btn { width: auto; padding: 5px 10px; background: #c0392b; font-size: 14px; margin: 0; }
-        .backup-btn { background: #27ae60; margin-top: 15px; }
-        .meta { color: #777; font-size: 12px; margin-bottom: 10px; }
+        .backup-zone { display: flex; gap: 10px; margin-top: 20px; }
+        .backup-btn { background: #27ae60; margin: 0; }
+        .import-btn { background: #e67e22; margin: 0; }
+        .meta { color: #777; font-size: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .badge { background: #34495e; padding: 2px 8px; border-radius: 3px; color: #ecf0f1; font-weight: bold; }
         .error-msg { color: #ff4a4a; font-size: 14px; margin-top: 10px; display: none; }
+        .filter-bar { background: #1e1e1e; padding: 15px; border-radius: 8px; margin-top: 20px; display: flex; gap: 10px; width: 100%; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -38,19 +42,50 @@
             <button class="logout-btn" onclick="logout()">Выйти</button>
         </h1>
 
+        <!-- Форма добавления записей -->
         <div class="post">
             <h3>Создать новую запись</h3>
-            <input type="text" id="topicTitle" placeholder="Заголовок темы / заметки...">
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="topicTitle" placeholder="Заголовок темы / заметки..." style="flex: 2;">
+                <!-- Выбор категории -->
+                <select id="topicCategory" style="flex: 1;">
+                    <option value="Общее">📁 Общее</option>
+                    <option value="Личное">🔒 Личное</option>
+                    <option value="Пароли">🔑 Пароли / Доступы</option>
+                    <option value="Ссылки">🔗 Полезные ссылки</option>
+                    <option value="Идеи">💡 Идеи / Проекты</option>
+                </select>
+            </div>
             <textarea id="topicText" placeholder="Текст вашей секретной записи..."></textarea>
             <button onclick="createTopic()">Сохранить на форуме</button>
         </div>
 
+        <!-- Панель фильтров и поиска -->
+        <div class="filter-bar">
+            <select id="filterCategory" onchange="loadTopics()" style="margin:0; flex: 1;">
+                <option value="Все">🔍 Все категории</option>
+                <option value="Общее">📁 Общее</option>
+                <option value="Личное">🔒 Личное</option>
+                <option value="Пароли">🔑 Пароли</option>
+                <option value="Ссылки">🔗 Ссылки</option>
+                <option value="Идеи">💡 Идеи</option>
+            </select>
+            <input type="text" id="searchQuery" oninput="loadTopics()" placeholder="Поиск по тексту..." style="margin:0; flex: 2;">
+        </div>
+
+        <!-- Лента тем -->
         <div id="topicsList"></div>
-        <button class="backup-btn" onclick="exportBackup()">💾 Скачать резервную копию данных (Файл .json)</button>
+
+        <!-- Зона бэкапа и восстановления -->
+        <div class="backup-zone">
+            <button class="backup-btn" onclick="exportBackup()">💾 Скачать бэкап (.json)</button>
+            <button class="import-btn" onclick="document.getElementById('importFile').click()">📂 Восстановить из файла</button>
+            <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importBackup(this)">
+        </div>
     </div>
 
     <script>
-        // Безопасное символьное объявление вашего точного пароля
+        // Пароль: Px3#WkdDnkab6B;
         const passArray = ['P','x','3','#','W','k','d','D','n','k','a','b','6','B',';'];
         const CORRECT_PASSWORD = passArray.join('');
 
@@ -61,8 +96,6 @@
         function checkPassword() {
             const input = document.getElementById('passwordInput').value;
             const error = document.getElementById('errorMsg');
-            
-            // Прямое посимвольное сравнение строк во избежание багов парсинга
             if (input.toString() === CORRECT_PASSWORD.toString()) {
                 sessionStorage.setItem('forum_authenticated', 'true');
                 showForum();
@@ -86,10 +119,18 @@
         function createTopic() {
             const title = document.getElementById('topicTitle').value.trim();
             const text = document.getElementById('topicText').value.trim();
+            const category = document.getElementById('topicCategory').value;
+            
             if (!title || !text) return alert('Заполните заголовок и текст!');
 
             const topics = JSON.parse(localStorage.getItem('my_private_forum_data')) || [];
-            topics.unshift({ id: Date.now(), title: title, text: text, date: new Date().toLocaleString('ru-RU') });
+            topics.unshift({
+                id: Date.now(),
+                title: title,
+                text: text,
+                category: category,
+                date: new Date().toLocaleString('ru-RU')
+            });
             localStorage.setItem('my_private_forum_data', JSON.stringify(topics));
 
             document.getElementById('topicTitle').value = '';
@@ -100,15 +141,30 @@
         function loadTopics() {
             const list = document.getElementById('topicsList');
             const topics = JSON.parse(localStorage.getItem('my_private_forum_data')) || [];
+            const selectedCategory = document.getElementById('filterCategory').value;
+            const searchQuery = document.getElementById('searchQuery').value.toLowerCase().trim();
+            
             list.innerHTML = '';
-            if (topics.length === 0) {
-                list.innerHTML = '<p style="color: #555; text-align: center; margin-top: 30px;">Здесь пока нет ни одной приватной записи.</p>';
+
+            // Фильтрация данных
+            const filteredTopics = topics.filter(topic => {
+                const matchesCategory = (selectedCategory === 'Все' || topic.category === selectedCategory);
+                const matchesSearch = (topic.title.toLowerCase().includes(searchQuery) || topic.text.toLowerCase().includes(searchQuery));
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filteredTopics.length === 0) {
+                list.innerHTML = '<p style="color: #555; text-align: center; margin-top: 30px;">Ничего не найдено.</p>';
                 return;
             }
-            topics.forEach(topic => {
+
+            filteredTopics.forEach(topic => {
                 list.innerHTML += `
                     <div class="post">
-                        <div class="meta">Создано: ${topic.date}</div>
+                        <div class="meta">
+                            <span>📅 ${topic.date}</span>
+                            <span class="badge">${topic.category || 'Общее'}</span>
+                        </div>
                         <h3 style="margin: 0 0 10px 0; color: #2174c7;">${topic.title}</h3>
                         <p style="margin: 0; line-height: 1.6; white-space: pre-wrap;">${topic.text}</p>
                         <span style="position: absolute; right: 15px; top: 15px; color: #ff4a4a; cursor: pointer; font-size: 12px;" onclick="deleteTopic(${topic.id})">❌ Удалить</span>
@@ -118,7 +174,7 @@
         }
 
         function deleteTopic(id) {
-            if (confirm('Вы уверены, что хотите удалить эту запись?')) {
+            if (confirm('Удалить эту запись?')) {
                 let topics = JSON.parse(localStorage.getItem('my_private_forum_data')) || [];
                 topics = topics.filter(t => t.id !== id);
                 localStorage.setItem('my_private_forum_data', JSON.stringify(topics));
@@ -135,6 +191,6 @@
             a.download = `forum_backup_${new Date().toISOString().slice(0,10)}.json`;
             a.click();
         }
-    </script>
-</body>
-</html>
+
+        // Функция импорта (Восстановления базы из файла)
+        function importBackup(input) {
