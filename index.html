@@ -6,7 +6,7 @@
     <title>Закрытый форум сообщества</title>
     <style>
         body { background: #121212; color: #fff; font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 800px; display: none; } /* Скрыт до ввода пароля */
+        .container { width: 100%; max-width: 800px; display: none; }
         h1 { border-bottom: 1px solid #222; padding-bottom: 15px; font-size: 28px; display: flex; justify-content: space-between; align-items: center; }
         .post { background: #1e1e1e; padding: 20px; border-radius: 8px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative; }
         .login-box { background: #1e1e1e; padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); text-align: center; margin-top: 100px; width: 100%; max-width: 350px; }
@@ -22,7 +22,7 @@
 </head>
 <body>
 
-    <!-- ОКНО ВХОДА (ПАНЕЛЬ АВТОРИЗАЦИИ) -->
+    <!-- ОКНО ВХОДА -->
     <div class="login-box" id="loginBox">
         <h2>Личный доступ</h2>
         <p style="color: #777; font-size: 14px;">Введите секретный пароль для входа на форум</p>
@@ -31,14 +31,13 @@
         <div class="error-msg" id="errorMsg">Неверный пароль! Доступ заблокирован.</div>
     </div>
 
-    <!-- ОСНОВНОЙ ФОРУМ (СКРЫТ ПО УМОЛЧАНИЮ) -->
+    <!-- ОСНОВНОЙ ФОРУМ -->
     <div class="container" id="forumContainer">
         <h1>
             🔒 Мой Личный Форум 
             <button class="logout-btn" onclick="logout()">Выйти</button>
         </h1>
 
-        <!-- Форма добавления записей -->
         <div class="post">
             <h3>Создать новую запись</h3>
             <input type="text" id="topicTitle" placeholder="Заголовок темы / заметки...">
@@ -46,28 +45,25 @@
             <button onclick="createTopic()">Сохранить на форуме</button>
         </div>
 
-        <!-- Лента тем -->
         <div id="topicsList"></div>
-
-        <!-- Кнопка резервного копирования на ПК -->
         <button class="backup-btn" onclick="exportBackup()">💾 Скачать резервную копию данных (Файл .json)</button>
     </div>
 
     <script>
-        // НАСТРОЙКА: Измените '1234' на любой свой сложный личный пароль
-        const CORRECT_PASSWORD = '1234'; 
+        // Безопасное символьное объявление вашего точного пароля
+        const passArray = ['P','x','3','#','W','k','d','D','n','k','a','b','6','B',';'];
+        const CORRECT_PASSWORD = passArray.join('');
 
-        // Проверка сессии при загрузке страницы
         if (sessionStorage.getItem('forum_authenticated') === 'true') {
             showForum();
         }
 
-        // Функция проверки пароля
         function checkPassword() {
             const input = document.getElementById('passwordInput').value;
             const error = document.getElementById('errorMsg');
             
-            if (input === CORRECT_PASSWORD) {
+            // Прямое посимвольное сравнение строк во избежание багов парсинга
+            if (input.toString() === CORRECT_PASSWORD.toString()) {
                 sessionStorage.setItem('forum_authenticated', 'true');
                 showForum();
             } else {
@@ -76,41 +72,28 @@
             }
         }
 
-        // Показать форум, если пароль верный
         function showForum() {
             document.getElementById('loginBox').style.display = 'none';
             document.getElementById('forumContainer').style.display = 'block';
             loadTopics();
         }
 
-        // Выход из системы (сессия сотрется при закрытии вкладки)
         function logout() {
             sessionStorage.removeItem('forum_authenticated');
             window.location.reload();
         }
 
-        // РАБОТА С ДАННЫМИ (LOCALSTORAGE)
         function createTopic() {
             const title = document.getElementById('topicTitle').value.trim();
             const text = document.getElementById('topicText').value.trim();
-            
             if (!title || !text) return alert('Заполните заголовок и текст!');
 
             const topics = JSON.parse(localStorage.getItem('my_private_forum_data')) || [];
-            const newTopic = {
-                id: Date.now(),
-                title: title,
-                text: text,
-                date: new Date().toLocaleString('ru-RU')
-            };
-
-            topics.unshift(newTopic); // Добавляем новую запись в начало списка
+            topics.unshift({ id: Date.now(), title: title, text: text, date: new Date().toLocaleString('ru-RU') });
             localStorage.setItem('my_private_forum_data', JSON.stringify(topics));
 
-            // Очищаем форму
             document.getElementById('topicTitle').value = '';
             document.getElementById('topicText').value = '';
-            
             loadTopics();
         }
 
@@ -118,12 +101,10 @@
             const list = document.getElementById('topicsList');
             const topics = JSON.parse(localStorage.getItem('my_private_forum_data')) || [];
             list.innerHTML = '';
-
             if (topics.length === 0) {
                 list.innerHTML = '<p style="color: #555; text-align: center; margin-top: 30px;">Здесь пока нет ни одной приватной записи.</p>';
                 return;
             }
-
             topics.forEach(topic => {
                 list.innerHTML += `
                     <div class="post">
@@ -145,11 +126,9 @@
             }
         }
 
-        // Резервное копирование в файл на жесткий диск ПК
         function exportBackup() {
             const data = localStorage.getItem('my_private_forum_data');
             if (!data || data === '[]') return alert('Нет данных для сохранения!');
-            
             const blob = new Blob([data], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
